@@ -18,6 +18,9 @@ import { DocumentsPage } from '@/routes/rental/DocumentsPage'
 import { OperationsPage } from '@/routes/operations/OperationsPage'
 import { OperationDetailPage } from '@/routes/operations/OperationDetailPage'
 import { OperationKanbanPage } from '@/routes/operations/OperationKanbanPage'
+import { ContactsPage } from '@/routes/contacts/ContactsPage'
+import { SuggestionsPage } from '@/routes/suggestions/SuggestionsPage'
+import { SuggestionDetailPage } from '@/routes/suggestions/SuggestionDetailPage'
 
 export default function App() {
   return (
@@ -50,8 +53,9 @@ export default function App() {
             <Route path="/operations" element={<OperationsPage />} />
             <Route path="/operations/:id" element={<OperationDetailPage />} />
             <Route path="/operations/kanban" element={<OperationKanbanPage />} />
-            <Route path="/contacts" element={<div className="text-muted-foreground">Contacts — à venir</div>} />
-            <Route path="/suggestions" element={<div className="text-muted-foreground">Suggestions — à venir</div>} />
+            <Route path="/contacts" element={<ContactsPage />} />
+            <Route path="/suggestions" element={<SuggestionsPage />} />
+            <Route path="/suggestions/:id" element={<SuggestionDetailPage />} />
           </Route>
         </Route>
       </Routes>
