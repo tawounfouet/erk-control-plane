@@ -6,6 +6,12 @@ import { LoginPage } from '@/routes/auth/LoginPage'
 import { LogoutPage } from '@/routes/auth/LogoutPage'
 import { ResetPasswordPage } from '@/routes/auth/ResetPasswordPage'
 import { DashboardPage } from '@/routes/manager/DashboardPage'
+import { BuildingsPage } from '@/routes/patrimoine/BuildingsPage'
+import { BuildingDetailPage } from '@/routes/patrimoine/BuildingDetailPage'
+import { UnitsPage } from '@/routes/patrimoine/UnitsPage'
+import { UnitDetailPage } from '@/routes/patrimoine/UnitDetailPage'
+import { InventoryPage } from '@/routes/patrimoine/InventoryPage'
+import { InventoryAssignmentsPage } from '@/routes/patrimoine/InventoryAssignmentsPage'
 
 export default function App() {
   return (
@@ -26,9 +32,12 @@ export default function App() {
               </Layout>
             }
           >
-            <Route path="/buildings" element={<div className="text-muted-foreground">Bâtiments — à venir</div>} />
-            <Route path="/units" element={<div className="text-muted-foreground">Unités — à venir</div>} />
-            <Route path="/inventory" element={<div className="text-muted-foreground">Inventaire — à venir</div>} />
+            <Route path="/buildings" element={<BuildingsPage />} />
+            <Route path="/buildings/:id" element={<BuildingDetailPage />} />
+            <Route path="/units" element={<UnitsPage />} />
+            <Route path="/units/:id" element={<UnitDetailPage />} />
+            <Route path="/inventory" element={<InventoryPage />} />
+            <Route path="/inventory/assignments" element={<InventoryAssignmentsPage />} />
             <Route path="/tenants" element={<div className="text-muted-foreground">Locataires — à venir</div>} />
             <Route path="/operations" element={<div className="text-muted-foreground">Maintenance — à venir</div>} />
             <Route path="/contacts" element={<div className="text-muted-foreground">Contacts — à venir</div>} />

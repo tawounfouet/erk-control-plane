@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import {
   Building2, Users, Wrench, Phone, MessageSquare, LayoutDashboard,
-  PanelLeftClose, PanelLeft,
+  PanelLeftClose, PanelLeft, DoorOpen, Package, ClipboardList,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -15,8 +15,9 @@ const navGroups = [
     items: [
       { title: 'Dashboard', path: '/', icon: LayoutDashboard },
       { title: 'Bâtiments', path: '/buildings', icon: Building2 },
-      { title: 'Unités', path: '/units', icon: Building2 },
-      { title: 'Inventaire', path: '/inventory', icon: Building2 },
+      { title: 'Unités', path: '/units', icon: DoorOpen },
+      { title: 'Inventaire', path: '/inventory', icon: Package },
+      { title: 'Affectations', path: '/inventory/assignments', icon: ClipboardList },
     ],
   },
   {
