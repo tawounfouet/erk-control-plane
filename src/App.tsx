@@ -12,6 +12,9 @@ import { UnitsPage } from '@/routes/patrimoine/UnitsPage'
 import { UnitDetailPage } from '@/routes/patrimoine/UnitDetailPage'
 import { InventoryPage } from '@/routes/patrimoine/InventoryPage'
 import { InventoryAssignmentsPage } from '@/routes/patrimoine/InventoryAssignmentsPage'
+import { TenantsPage } from '@/routes/rental/TenantsPage'
+import { TenantDetailPage } from '@/routes/rental/TenantDetailPage'
+import { DocumentsPage } from '@/routes/rental/DocumentsPage'
 
 export default function App() {
   return (
@@ -38,7 +41,9 @@ export default function App() {
             <Route path="/units/:id" element={<UnitDetailPage />} />
             <Route path="/inventory" element={<InventoryPage />} />
             <Route path="/inventory/assignments" element={<InventoryAssignmentsPage />} />
-            <Route path="/tenants" element={<div className="text-muted-foreground">Locataires — à venir</div>} />
+            <Route path="/tenants" element={<TenantsPage />} />
+            <Route path="/tenants/:id" element={<TenantDetailPage />} />
+            <Route path="/documents" element={<DocumentsPage />} />
             <Route path="/operations" element={<div className="text-muted-foreground">Maintenance — à venir</div>} />
             <Route path="/contacts" element={<div className="text-muted-foreground">Contacts — à venir</div>} />
             <Route path="/suggestions" element={<div className="text-muted-foreground">Suggestions — à venir</div>} />
