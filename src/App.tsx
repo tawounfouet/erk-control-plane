@@ -15,6 +15,9 @@ import { InventoryAssignmentsPage } from '@/routes/patrimoine/InventoryAssignmen
 import { TenantsPage } from '@/routes/rental/TenantsPage'
 import { TenantDetailPage } from '@/routes/rental/TenantDetailPage'
 import { DocumentsPage } from '@/routes/rental/DocumentsPage'
+import { OperationsPage } from '@/routes/operations/OperationsPage'
+import { OperationDetailPage } from '@/routes/operations/OperationDetailPage'
+import { OperationKanbanPage } from '@/routes/operations/OperationKanbanPage'
 
 export default function App() {
   return (
@@ -44,7 +47,9 @@ export default function App() {
             <Route path="/tenants" element={<TenantsPage />} />
             <Route path="/tenants/:id" element={<TenantDetailPage />} />
             <Route path="/documents" element={<DocumentsPage />} />
-            <Route path="/operations" element={<div className="text-muted-foreground">Maintenance — à venir</div>} />
+            <Route path="/operations" element={<OperationsPage />} />
+            <Route path="/operations/:id" element={<OperationDetailPage />} />
+            <Route path="/operations/kanban" element={<OperationKanbanPage />} />
             <Route path="/contacts" element={<div className="text-muted-foreground">Contacts — à venir</div>} />
             <Route path="/suggestions" element={<div className="text-muted-foreground">Suggestions — à venir</div>} />
           </Route>

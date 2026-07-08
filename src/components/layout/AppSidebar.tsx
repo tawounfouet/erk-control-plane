@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import {
   Building2, Users, Wrench, Phone, MessageSquare, LayoutDashboard,
   PanelLeftClose, PanelLeft, DoorOpen, Package, ClipboardList, FileText,
+  Kanban,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -31,6 +32,7 @@ const navGroups = [
     label: 'Opérations',
     items: [
       { title: 'Maintenance', path: '/operations', icon: Wrench },
+      { title: 'Kanban', path: '/operations/kanban', icon: Kanban },
       { title: 'Contacts', path: '/contacts', icon: Phone },
       { title: 'Suggestions', path: '/suggestions', icon: MessageSquare },
     ],
