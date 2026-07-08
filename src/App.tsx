@@ -21,6 +21,7 @@ import { OperationKanbanPage } from '@/routes/operations/OperationKanbanPage'
 import { ContactsPage } from '@/routes/contacts/ContactsPage'
 import { SuggestionsPage } from '@/routes/suggestions/SuggestionsPage'
 import { SuggestionDetailPage } from '@/routes/suggestions/SuggestionDetailPage'
+import { SearchPage } from '@/routes/manager/SearchPage'
 
 export default function App() {
   return (
@@ -56,6 +57,7 @@ export default function App() {
             <Route path="/contacts" element={<ContactsPage />} />
             <Route path="/suggestions" element={<SuggestionsPage />} />
             <Route path="/suggestions/:id" element={<SuggestionDetailPage />} />
+            <Route path="/search" element={<SearchPage />} />
           </Route>
         </Route>
       </Routes>
