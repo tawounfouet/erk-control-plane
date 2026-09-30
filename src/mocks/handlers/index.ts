@@ -5,6 +5,7 @@ import { operationsHandlers } from './operations'
 import { contactsHandlers } from './contacts'
 import { suggestionsHandlers } from './suggestions'
 import { managerHandlers } from './manager'
+import { adminHandlers } from './admin'
 
 export const handlers = [
   ...authHandlers,
@@ -14,4 +15,5 @@ export const handlers = [
   ...contactsHandlers,
   ...suggestionsHandlers,
   ...managerHandlers,
+  ...adminHandlers,
 ]
