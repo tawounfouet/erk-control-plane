@@ -22,6 +22,23 @@ import { ContactsPage } from '@/routes/contacts/ContactsPage'
 import { SuggestionsPage } from '@/routes/suggestions/SuggestionsPage'
 import { SuggestionDetailPage } from '@/routes/suggestions/SuggestionDetailPage'
 import { SearchPage } from '@/routes/manager/SearchPage'
+import { UsersListPage } from '@/routes/admin/UsersListPage'
+import { UserDetailPage } from '@/routes/admin/UserDetailPage'
+import { UserCreatePage } from '@/routes/admin/UserCreatePage'
+import { StudentProfilesPage } from '@/routes/admin/StudentProfilesPage'
+import { AuditLogPage } from '@/routes/admin/AuditLogPage'
+import { NotificationsPage } from '@/routes/admin/NotificationsPage'
+import { SettingsPage } from '@/routes/admin/SettingsPage'
+import { SystemHealthPage } from '@/routes/admin/SystemHealthPage'
+import { MediaFilesPage } from '@/routes/admin/MediaFilesPage'
+import { DataImportPage } from '@/routes/admin/DataImportPage'
+import { DataExportPage } from '@/routes/admin/DataExportPage'
+import { BatchActionsPage } from '@/routes/admin/BatchActionsPage'
+import { GroupManagementPage } from '@/routes/admin/GroupManagementPage'
+import { PermissionsMatrixPage } from '@/routes/admin/PermissionsMatrixPage'
+import { AdvancedDashboardPage } from '@/routes/admin/AdvancedDashboardPage'
+import { ConditionReportPage } from '@/routes/admin/ConditionReportPage'
+import { ConditionReportDetailPage } from '@/routes/admin/ConditionReportDetailPage'
 
 export default function App() {
   return (
@@ -32,16 +49,8 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route
-            element={
-              <Layout>
-                <Routes>
-                  <Route path="/" element={<DashboardPage />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </Layout>
-            }
-          >
+          <Route element={<Layout />}>
+            <Route path="/" element={<DashboardPage />} />
             <Route path="/buildings" element={<BuildingsPage />} />
             <Route path="/buildings/:id" element={<BuildingDetailPage />} />
             <Route path="/units" element={<UnitsPage />} />
@@ -58,6 +67,25 @@ export default function App() {
             <Route path="/suggestions" element={<SuggestionsPage />} />
             <Route path="/suggestions/:id" element={<SuggestionDetailPage />} />
             <Route path="/search" element={<SearchPage />} />
+            {/* Admin routes */}
+            <Route path="/admin/users" element={<UsersListPage />} />
+            <Route path="/admin/users/new" element={<UserCreatePage />} />
+            <Route path="/admin/users/:id" element={<UserDetailPage />} />
+            <Route path="/admin/students" element={<StudentProfilesPage />} />
+            <Route path="/admin/audit" element={<AuditLogPage />} />
+            <Route path="/admin/notifications" element={<NotificationsPage />} />
+            <Route path="/admin/settings" element={<SettingsPage />} />
+            <Route path="/admin/health" element={<SystemHealthPage />} />
+            <Route path="/admin/media" element={<MediaFilesPage />} />
+            <Route path="/admin/import" element={<DataImportPage />} />
+            <Route path="/admin/export" element={<DataExportPage />} />
+            <Route path="/admin/batch" element={<BatchActionsPage />} />
+            <Route path="/admin/groups" element={<GroupManagementPage />} />
+            <Route path="/admin/permissions" element={<PermissionsMatrixPage />} />
+            <Route path="/admin/dashboard" element={<AdvancedDashboardPage />} />
+            <Route path="/admin/condition-reports" element={<ConditionReportPage />} />
+            <Route path="/admin/condition-reports/:id" element={<ConditionReportDetailPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Route>
       </Routes>

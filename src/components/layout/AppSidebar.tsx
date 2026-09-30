@@ -2,7 +2,8 @@ import { Link, useLocation } from 'react-router-dom'
 import {
   Building2, Users, Wrench, Phone, MessageSquare, LayoutDashboard,
   PanelLeftClose, PanelLeft, DoorOpen, Package, ClipboardList, FileText,
-  Kanban, Search,
+  Kanban, Search, Shield, Settings, Upload, Download, Activity,
+  UserCog, GraduationCap, FileSearch, Image, AlertTriangle, ClipboardCheck,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -36,6 +37,25 @@ const navGroups = [
       { title: 'Kanban', path: '/operations/kanban', icon: Kanban },
       { title: 'Contacts', path: '/contacts', icon: Phone },
       { title: 'Suggestions', path: '/suggestions', icon: MessageSquare },
+    ],
+  },
+  {
+    label: 'Administration',
+    items: [
+      { title: 'Dashboard', path: '/admin/dashboard', icon: Activity },
+      { title: 'Utilisateurs', path: '/admin/users', icon: UserCog },
+      { title: 'Étudiants', path: '/admin/students', icon: GraduationCap },
+      { title: 'Audit', path: '/admin/audit', icon: FileSearch },
+      { title: 'Notifications', path: '/admin/notifications', icon: MessageSquare },
+      { title: 'Paramètres', path: '/admin/settings', icon: Settings },
+      { title: 'Santé', path: '/admin/health', icon: Activity },
+      { title: 'Médias', path: '/admin/media', icon: Image },
+      { title: 'Import', path: '/admin/import', icon: Upload },
+      { title: 'Export', path: '/admin/export', icon: Download },
+      { title: 'Batch', path: '/admin/batch', icon: AlertTriangle },
+      { title: 'Groupes', path: '/admin/groups', icon: Users },
+      { title: 'Permissions', path: '/admin/permissions', icon: Shield },
+      { title: 'États des lieux', path: '/admin/condition-reports', icon: ClipboardCheck },
     ],
   },
 ]
@@ -102,15 +122,16 @@ export function AppSidebar() {
         ))}
       </nav>
 
-      <div className="border-t border-sidebar-border p-2 space-y-1">
-        <div className={cn('flex items-center', collapsed ? 'justify-center' : 'px-2')}>
+      <div className="border-t border-sidebar-border p-2 space-y-2">
+        <div className={cn('flex items-center', collapsed ? 'justify-center' : 'justify-between px-2')}>
+          {!collapsed && <span className="text-xs text-sidebar-foreground/70">Thème</span>}
           <ThemeToggle />
-          {!collapsed && user && (
-            <span className="ml-2 text-xs text-sidebar-foreground/70 truncate">
-              {user.first_name} {user.last_name}
-            </span>
-          )}
         </div>
+        {!collapsed && user && (
+          <div className="px-2 text-xs text-sidebar-foreground/70 truncate">
+            {user.first_name} {user.last_name}
+          </div>
+        )}
         {!collapsed && (
           <Button
             variant="ghost"
