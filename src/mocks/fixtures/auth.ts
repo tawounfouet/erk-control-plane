@@ -1,14 +1,14 @@
 export const MOCK_USER = {
   id: 'u-001',
   email: 'admin@eureka-residences.com',
-  first_name: 'Admin',
-  last_name: 'Eureka',
+  first_name: 'Thomas',
+  last_name: 'AWOUNFOUET',
+  phone: '+237612345678',
+  is_active: true,
   is_staff: true,
-  is_superuser: true,
   is_tenant: false,
+  full_name: 'Thomas AWOUNFOUET',
   role_display: 'Administrateur',
-  phone_number: '+237612345678',
-  profile: null,
 }
 
 export const MOCK_TOKENS = {

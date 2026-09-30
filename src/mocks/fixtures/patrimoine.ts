@@ -28,6 +28,8 @@ export const MOCK_BUILDING_STATS = {
   maintenance_units: 1,
   reserved_units: 1,
   occupancy_rate: 66.7,
+  floors_count: 3,
+  units_by_status: { AVAILABLE: 2, OCCUPIED: 8, MAINTENANCE: 1, RESERVED: 1, OUT_OF_SERVICE: 0 },
 }
 
 export const MOCK_INVENTORY_ITEMS = [

@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import { MOCK_SUGGESTIONS, MOCK_SUGGESTION_DETAIL, MOCK_SUGGESTION_STATS } from '@/mocks/fixtures/suggestions'
+import { MOCK_SUGGESTIONS, MOCK_SUGGESTION_STATS } from '@/mocks/fixtures/suggestions'
 
 export const suggestionsHandlers = [
   http.get('/api/suggestions/suggestions/', ({ request }) => {
@@ -11,10 +11,23 @@ export const suggestionsHandlers = [
   }),
 
   http.get('/api/suggestions/suggestions/:id/', ({ params }) => {
-    if (params.id === 's-001') return HttpResponse.json(MOCK_SUGGESTION_DETAIL)
-    const s = MOCK_SUGGESTIONS.find((s) => s.id === params.id)
-    if (!s) return new HttpResponse(null, { status: 404 })
-    return HttpResponse.json(s)
+    const base = MOCK_SUGGESTIONS.find((s) => s.id === params.id)
+    if (!base) return new HttpResponse(null, { status: 404 })
+    return HttpResponse.json({
+      ...base,
+      description: `Description de la suggestion "${base.titre}"`,
+      nom: base.author_display === 'Anonyme' ? '' : base.author_display,
+      email: '',
+      telephone: '',
+      rappel: false,
+      author: base.author_display,
+      contact_email: '',
+      is_active: true,
+      updated_at: base.created_at,
+      responses: [],
+      comments: [],
+      attachments: [],
+    })
   }),
 
   http.get('/api/suggestions/suggestions/my_suggestions/', () =>

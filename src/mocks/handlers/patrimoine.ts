@@ -12,7 +12,11 @@ export const patrimoineHandlers = [
   http.get('/api/patrimoine/buildings/:id/', ({ params }) => {
     const building = MOCK_BUILDINGS.find((b) => b.id === params.id)
     if (!building) return new HttpResponse(null, { status: 404 })
-    return HttpResponse.json(building)
+    const floors = MOCK_FLOORS.filter((f) => f.building === building.id)
+    return HttpResponse.json({
+      ...building,
+      floors: floors.map((f) => ({ ...f, chemical_code: f.name, units_count: f.unit_count })),
+    })
   }),
 
   http.get('/api/patrimoine/buildings/:id/stats/', ({ params }) => {
