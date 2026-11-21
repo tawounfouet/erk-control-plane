@@ -2,19 +2,22 @@ import { useState } from 'react'
 import { Navigate, Link } from 'react-router-dom'
 import { Building2, CheckCircle2, Eye, EyeOff, LockKeyhole } from 'lucide-react'
 import { useAuthStore } from '@/stores/auth-store'
-import { login, getMe } from '@/lib/api/auth'
+import { getMe, login, logout } from '@/lib/api/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 export function LoginPage() {
-  const { isAuthenticated, setUser } = useAuthStore()
+  const { isAuthenticated, isLoading, setUser } = useAuthStore()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  if (isLoading) {
+    return <main className="grid min-h-screen place-items-center" role="status">Restauration de votre session…</main>
+  }
   if (isAuthenticated) return <Navigate to="/" replace />
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -23,7 +26,12 @@ export function LoginPage() {
     setLoading(true)
     try {
       await login(email, password)
-      setUser(await getMe())
+      const user = await getMe()
+      if (!user.is_staff) {
+        await logout()
+        throw new Error('Cet espace est réservé aux équipes autorisées.')
+      }
+      setUser(user)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Échec de connexion')
     } finally {
