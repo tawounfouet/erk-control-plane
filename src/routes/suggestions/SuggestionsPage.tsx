@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Lightbulb, Search, MessageSquare, Clock } from 'lucide-react'
-import { useSuggestions, useSuggestionStatistics } from '@/hooks/useSuggestions'
+import { useCreateSuggestion, useSuggestions, useSuggestionStatistics } from '@/hooks/useSuggestions'
 import { PageHeader } from '@/components/common/PageHeader'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { SuggestionStatus } from '@/lib/types/suggestions.types'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 const STATUS_LABELS: Record<SuggestionStatus, string> = {
   submitted: 'Soumise',
@@ -51,6 +54,15 @@ export function SuggestionsPage() {
 
   const { data, isLoading, error } = useSuggestions(params)
   const { data: stats } = useSuggestionStatistics()
+  const createSuggestion = useCreateSuggestion()
+
+  async function submitSuggestion(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    const anonymous = data.get('anonyme') === 'on'
+    await createSuggestion.mutateAsync({ titre: String(data.get('titre')), description: String(data.get('description')), categorie: String(data.get('categorie')) as 'other', anonyme: anonymous, ...(!anonymous && { nom: String(data.get('nom')), email: String(data.get('email')) }) })
+    event.currentTarget.reset()
+  }
 
   return (
     <div>
@@ -58,6 +70,18 @@ export function SuggestionsPage() {
         title="Boîte à suggestions"
         description="Gestion des suggestions des résidents"
       />
+
+      <details className="mb-6 rounded-xl border bg-card p-4">
+        <summary className="cursor-pointer font-semibold">Déposer une suggestion</summary>
+        <form onSubmit={submitSuggestion} className="mt-4 grid gap-4 border-t pt-4 md:grid-cols-2">
+          <div className="space-y-2"><Label htmlFor="suggestion-title">Titre</Label><Input id="suggestion-title" name="titre" required /></div>
+          <div className="space-y-2"><Label htmlFor="suggestion-category">Catégorie</Label><select id="suggestion-category" name="categorie" className="h-11 w-full rounded-lg border bg-background px-3 text-sm">{Object.entries(CATEGORY_LABELS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></div>
+          <div className="space-y-2 md:col-span-2"><Label htmlFor="suggestion-description">Description</Label><textarea id="suggestion-description" name="description" required className="min-h-28 w-full rounded-lg border bg-background p-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" /></div>
+          <div className="space-y-2"><Label htmlFor="suggestion-name">Nom</Label><Input id="suggestion-name" name="nom" /></div><div className="space-y-2"><Label htmlFor="suggestion-email">E-mail</Label><Input id="suggestion-email" name="email" type="email" /></div>
+          <label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" name="anonyme" />Déposer anonymement</label>
+          <Button className="self-end" disabled={createSuggestion.isPending}><Lightbulb />Envoyer</Button>
+        </form>
+      </details>
 
       {stats && (
         <div className="mb-4 flex flex-wrap gap-2">

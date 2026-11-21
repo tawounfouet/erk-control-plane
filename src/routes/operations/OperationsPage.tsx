@@ -1,11 +1,15 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { useOperations, useOperationStats } from '@/hooks/useOperations'
+import { Plus } from 'lucide-react'
+import { useCreateOperation, useOperations, useOperationStats, useOperationTypes } from '@/hooks/useOperations'
 import { PageHeader } from '@/components/common/PageHeader'
 import { OperationTable } from '@/components/operations/OperationTable'
 import { StatusBadge } from '@/components/operations/StatusBadge'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { OperationStatus } from '@/lib/types/operations.types'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 const STATUS_FILTERS: Array<{ value: OperationStatus | ''; label: string }> = [
   { value: '', label: 'Tous' },
@@ -27,6 +31,15 @@ export function OperationsPage() {
 
   const { data, isLoading, error } = useOperations(params)
   const { data: stats } = useOperationStats()
+  const { data: operationTypes } = useOperationTypes()
+  const createOperation = useCreateOperation()
+
+  async function submitOperation(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    await createOperation.mutateAsync({ title: String(data.get('title')), description: String(data.get('description')), operation_type: String(data.get('operation_type')), priority: String(data.get('priority')) as 'LOW' | 'NORMAL' | 'HIGH' | 'URGENT', due_date: String(data.get('due_date') || '') || null, managed_unit: String(data.get('managed_unit') || '') || null })
+    event.currentTarget.reset()
+  }
 
   return (
     <div>
@@ -42,6 +55,19 @@ export function OperationsPage() {
           Vue Kanban
         </Link>
       </div>
+
+      <details className="mb-6 rounded-xl border bg-card p-4">
+        <summary className="cursor-pointer font-semibold">Créer une opération</summary>
+        <form onSubmit={submitOperation} className="mt-4 grid gap-4 border-t pt-4 md:grid-cols-2">
+          <div className="space-y-2"><Label htmlFor="operation-title">Titre</Label><Input id="operation-title" name="title" required /></div>
+          <div className="space-y-2"><Label htmlFor="operation-type">Type</Label><select id="operation-type" name="operation_type" required className="h-11 w-full rounded-lg border bg-background px-3 text-sm"><option value="">Sélectionner</option>{operationTypes?.results.map((type) => <option key={type.id} value={type.id}>{type.name}</option>)}</select></div>
+          <div className="space-y-2 md:col-span-2"><Label htmlFor="operation-description">Description</Label><textarea id="operation-description" name="description" required className="min-h-24 w-full rounded-lg border bg-background p-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" /></div>
+          <div className="space-y-2"><Label htmlFor="operation-priority">Priorité</Label><select id="operation-priority" name="priority" className="h-11 w-full rounded-lg border bg-background px-3 text-sm"><option value="NORMAL">Normale</option><option value="LOW">Faible</option><option value="HIGH">Haute</option><option value="URGENT">Urgente</option></select></div>
+          <div className="space-y-2"><Label htmlFor="operation-due-date">Échéance</Label><Input id="operation-due-date" name="due_date" type="datetime-local" /></div>
+          <div className="space-y-2"><Label htmlFor="operation-unit">Identifiant du logement</Label><Input id="operation-unit" name="managed_unit" /></div>
+          <Button className="self-end" disabled={createOperation.isPending}><Plus />Créer</Button>
+        </form>
+      </details>
 
       {stats && (
         <div className="mb-4 flex flex-wrap gap-2">

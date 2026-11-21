@@ -1,15 +1,27 @@
+import { useState, type FormEvent } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, User, Calendar, Clock, MessageSquare, History } from 'lucide-react'
+import { ArrowLeft, User, Calendar, Clock, MessageSquare, History, Play, CheckCircle2, UserRoundCheck, Upload } from 'lucide-react'
 import { useOperation, useOperationComments, useOperationHistory } from '@/hooks/useOperations'
+import { useOperationAttachments, useOperationMutations } from '@/hooks/useOperationsAdmin'
 import { PageHeader } from '@/components/common/PageHeader'
 import { StatusBadge, PriorityBadge } from '@/components/operations/StatusBadge'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export function OperationDetailPage() {
   const { id } = useParams<{ id: string }>()
   const { data: op, isLoading, error } = useOperation(id!)
   const { data: comments } = useOperationComments(id!)
   const { data: history } = useOperationHistory(id!)
+  const { data: attachments } = useOperationAttachments(id!)
+  const mutations = useOperationMutations(id!)
+  const [message, setMessage] = useState('')
+
+  async function submitAssign(event: FormEvent<HTMLFormElement>) { event.preventDefault(); const data = new FormData(event.currentTarget); await mutations.assign.mutateAsync({ assignedTo: String(data.get('assigned_to')), supervisor: String(data.get('supervisor') || '') || undefined }); setMessage('L’opération a été affectée.') }
+  async function submitComment(event: FormEvent<HTMLFormElement>) { event.preventDefault(); const data = new FormData(event.currentTarget); await mutations.comment.mutateAsync({ content: String(data.get('content')), isInternal: data.get('is_internal') === 'on' }); event.currentTarget.reset(); setMessage('Le commentaire a été ajouté.') }
+  async function submitUpload(event: FormEvent<HTMLFormElement>) { event.preventDefault(); const data = new FormData(event.currentTarget); const file = data.get('file'); if (!(file instanceof File) || !file.size) return; await mutations.upload.mutateAsync({ file, type: String(data.get('attachment_type')) }); event.currentTarget.reset(); setMessage('La pièce jointe a été ajoutée.') }
 
   if (isLoading) {
     return (
@@ -52,6 +64,12 @@ export function OperationDetailPage() {
           </span>
         }
       />
+      {message && <p role="status" className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-700 dark:text-emerald-300">{message}</p>}
+
+      <section aria-labelledby="workflow-title" className="mb-6 rounded-xl border bg-card p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 id="workflow-title" className="font-semibold">Pilotage du workflow</h2><p className="text-sm text-muted-foreground">Les changements sont historisés automatiquement.</p></div><div className="flex flex-wrap gap-2">{op.status === 'CREATED' && <Button size="sm" onClick={() => mutations.start.mutate()} disabled={mutations.start.isPending}><Play />Démarrer</Button>}{op.status === 'IN_PROGRESS' && <Button size="sm" onClick={() => mutations.complete.mutate({ notes: 'Intervention terminée depuis le centre de contrôle' })} disabled={mutations.complete.isPending}><CheckCircle2 />Terminer</Button>}</div></div>
+        <form onSubmit={submitAssign} className="mt-4 grid gap-3 border-t pt-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end"><div className="space-y-2"><Label htmlFor="assigned-to">Identifiant de l’intervenant</Label><Input id="assigned-to" name="assigned_to" required /></div><div className="space-y-2"><Label htmlFor="supervisor">Identifiant du superviseur</Label><Input id="supervisor" name="supervisor" /></div><Button variant="outline" disabled={mutations.assign.isPending}><UserRoundCheck />Affecter</Button></form>
+      </section>
 
       <div className="mb-6 grid gap-4 sm:grid-cols-4">
         <div className="rounded-lg border bg-card p-4">
@@ -162,6 +180,11 @@ export function OperationDetailPage() {
           )}
         </div>
       </div>
+
+      <section className="mt-8 grid gap-4 lg:grid-cols-2" aria-label="Contribution et pièces jointes">
+        <form onSubmit={submitComment} className="space-y-4 rounded-xl border bg-card p-4"><h2 className="font-semibold">Ajouter un commentaire</h2><div className="space-y-2"><Label htmlFor="operation-comment">Commentaire</Label><textarea id="operation-comment" name="content" required className="min-h-28 w-full rounded-lg border bg-background p-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" /></div><label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" name="is_internal" />Commentaire interne</label><Button disabled={mutations.comment.isPending}><MessageSquare />Publier</Button></form>
+        <form onSubmit={submitUpload} className="space-y-4 rounded-xl border bg-card p-4"><div><h2 className="font-semibold">Pièces jointes</h2><p className="text-sm text-muted-foreground">{attachments?.length ?? 0} fichier(s) rattaché(s)</p></div><div className="space-y-2"><Label htmlFor="operation-file">Fichier</Label><Input id="operation-file" name="file" type="file" required /></div><div className="space-y-2"><Label htmlFor="attachment-type">Nature</Label><select id="attachment-type" name="attachment_type" className="h-11 w-full rounded-lg border bg-background px-3 text-sm"><option value="photo_evidence">Photo du signalement</option><option value="photo_before">Photo avant intervention</option><option value="photo_after">Photo après intervention</option><option value="document">Document</option><option value="invoice">Facture</option></select></div><Button disabled={mutations.upload.isPending}><Upload />Ajouter</Button></form>
+      </section>
     </div>
   )
 }
