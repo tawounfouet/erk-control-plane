@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Search, UserPlus, Ban, CheckCircle, RefreshCw } from 'lucide-react'
 import { useUsers, useActivateUser } from '@/hooks/useAdmin'
 import { RoleBadge } from '@/components/admin/RoleBadge'
 import { PageHeader } from '@/components/common/PageHeader'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export function UsersListPage() {
+  const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [roleFilter, setRoleFilter] = useState('')
   const { data, isLoading } = useUsers({ search, role: roleFilter })
@@ -23,11 +24,9 @@ export function UsersListPage() {
         title="Utilisateurs"
         description="Gestion des utilisateurs, rôles et sessions"
         actions={
-          <Link to="/admin/users/new">
-            <Button>
-              <UserPlus className="mr-2 h-4 w-4" />
-              Nouvel utilisateur
-            </Button>
+          <Link to="/admin/users/new" className={buttonVariants()}>
+            <UserPlus aria-hidden="true" className="mr-2 h-4 w-4" />
+            Nouvel utilisateur
           </Link>
         }
       />
@@ -38,6 +37,7 @@ export function UsersListPage() {
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
+                aria-label="Rechercher un utilisateur"
                 placeholder="Rechercher par nom ou email..."
                 className="pl-8"
                 value={search}
@@ -45,6 +45,7 @@ export function UsersListPage() {
               />
             </div>
             <select
+              aria-label="Filtrer par rôle"
               className="rounded-md border border-input bg-background px-3 py-2 text-sm"
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
@@ -59,7 +60,7 @@ export function UsersListPage() {
       </Card>
 
       <Card>
-        <CardContent className="p-0">
+        <CardContent className="overflow-x-auto p-0">
           {isLoading ? (
             <div className="space-y-2 p-4">
               {[...Array(5)].map((_, i) => (
@@ -67,7 +68,7 @@ export function UsersListPage() {
               ))}
             </div>
           ) : (
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[760px] text-sm" aria-label="Utilisateurs du centre de contrôle">
               <thead className="border-b bg-muted/50">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium">Email</th>
@@ -80,7 +81,19 @@ export function UsersListPage() {
               </thead>
               <tbody className="divide-y">
                 {users.map((user) => (
-                  <tr key={user.id} className="hover:bg-muted/50">
+                  <tr
+                    key={user.id}
+                    className="cursor-pointer hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                    role="link"
+                    tabIndex={0}
+                    onClick={() => navigate(`/admin/users/${user.id}`)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault()
+                        navigate(`/admin/users/${user.id}`)
+                      }
+                    }}
+                  >
                     <td className="px-4 py-3">
                       <Link to={`/admin/users/${user.id}`} className="font-medium text-primary hover:underline">
                         {user.email}
@@ -108,10 +121,14 @@ export function UsersListPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => activate.mutate({ id: user.id, active: !user.is_active })}
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          activate.mutate({ id: user.id, active: !user.is_active })
+                        }}
                         disabled={activate.isPending}
+                        aria-label={user.is_active ? `Suspendre ${user.full_name}` : `Activer ${user.full_name}`}
                       >
-                        <RefreshCw className="h-4 w-4" />
+                        <RefreshCw aria-hidden="true" className="h-4 w-4" />
                       </Button>
                     </td>
                   </tr>
