@@ -1,7 +1,6 @@
 import { fetchJSON } from './client'
 import type {
   UserDetail,
-  UserSession,
   StudentProfile,
   AuditLogEntry,
   SystemConfiguration,
@@ -39,22 +38,17 @@ export async function updateUser(id: string, data: Partial<UserDetail>): Promise
 }
 
 export async function activateUser(id: string, active: boolean): Promise<UserDetail> {
-  return fetchJSON(`/api/auth/users/${id}/`, {
-    method: 'PATCH',
-    body: JSON.stringify({ is_active: active }),
+  const action = active ? 'activate-account' : 'suspend-account'
+  return fetchJSON(`/api/auth/users/${id}/${action}/`, {
+    method: 'POST',
   })
 }
 
-export async function resetUserPassword(id: string): Promise<void> {
-  await fetchJSON(`/api/auth/users/${id}/reset_password/`, { method: 'POST' })
-}
-
-export async function listUserSessions(userId: string): Promise<PaginatedResponse<UserSession>> {
-  return fetchJSON(`/api/auth/users/${userId}/sessions/`)
-}
-
-export async function terminateSession(sessionId: string): Promise<void> {
-  await fetchJSON(`/api/auth/sessions/${sessionId}/`, { method: 'DELETE' })
+export async function resetUserPassword(email: string): Promise<void> {
+  await fetchJSON('/api/auth/users/reset_password/', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  })
 }
 
 // Student Profiles
