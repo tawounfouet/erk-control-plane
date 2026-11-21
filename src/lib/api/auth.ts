@@ -1,4 +1,10 @@
-import { fetchJSONWithoutAuth, fetchJSON, setTokens, clearTokens } from './client'
+import {
+  fetchJSONWithoutAuth,
+  fetchJSON,
+  setTokens,
+  clearTokens,
+  getRefreshToken,
+} from './client'
 import type { User, LoginResponse, TokenRefresh } from '@/lib/types/auth.types'
 
 export type { User, LoginResponse, TokenRefresh }
@@ -38,6 +44,20 @@ export async function resetPassword(email: string): Promise<void> {
   })
 }
 
+export async function activate(uid: string, token: string): Promise<void> {
+  await fetchJSONWithoutAuth('/api/auth/users/activation/', {
+    method: 'POST',
+    body: JSON.stringify({ uid, token }),
+  })
+}
+
+export async function resendActivation(email: string): Promise<void> {
+  await fetchJSONWithoutAuth('/api/auth/users/resend_activation/', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  })
+}
+
 export async function confirmResetPassword(uid: string, token: string, newPassword: string): Promise<void> {
   await fetchJSONWithoutAuth('/api/auth/users/reset_password_confirm/', {
     method: 'POST',
@@ -45,6 +65,17 @@ export async function confirmResetPassword(uid: string, token: string, newPasswo
   })
 }
 
-export function logout(): void {
-  clearTokens()
+export async function logout(): Promise<void> {
+  const refresh = getRefreshToken()
+  try {
+    if (refresh) {
+      await fetchJSON<void>('/api/auth/logout/', {
+        method: 'POST',
+        body: JSON.stringify({ refresh }),
+        skipAuthRefresh: true,
+      })
+    }
+  } finally {
+    clearTokens()
+  }
 }
