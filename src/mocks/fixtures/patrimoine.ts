@@ -39,6 +39,38 @@ export const MOCK_INVENTORY_ITEMS = [
 ]
 
 export const MOCK_INVENTORY_ASSIGNMENTS = [
-  { id: 'ia-001', inventory_item: 'i-001', item_name: 'Climatisation 9000 BTU', unit: 'u-001', unit_identifier: 'A-001', quantity: 1, status: 'active', assigned_at: '2025-03-01T00:00:00Z' },
-  { id: 'ia-002', inventory_item: 'i-003', item_name: 'Ventilateur plafond', unit: 'u-001', unit_identifier: 'A-001', quantity: 2, status: 'active', assigned_at: '2025-03-01T00:00:00Z' },
+  { id: 'ia-001', inventory_item: 'i-001', inventory_item_name: 'Climatisation 9000 BTU', unit: 'u-001', unit_identifier: 'A-001', serial_number: 'LEGACY-001', assignment_date: '2025-03-01T00:00:00Z', return_date: null, condition_on_assignment: 'GOOD', current_condition: 'GOOD', purchase_price: '350000.00', purchase_date: '2025-02-15', warranty_end_date: '2027-02-15', assigned_by_name: 'Admin Eureka', returned_by_name: null, notes: '', is_assigned: true, is_under_warranty: true },
+  { id: 'ia-002', inventory_item: 'i-003', inventory_item_name: 'Ventilateur plafond', unit: 'u-001', unit_identifier: 'A-001', serial_number: 'LEGACY-002', assignment_date: '2025-03-01T00:00:00Z', return_date: null, condition_on_assignment: 'GOOD', current_condition: 'GOOD', purchase_price: '45000.00', purchase_date: '2025-02-15', warranty_end_date: null, assigned_by_name: 'Admin Eureka', returned_by_name: null, notes: '', is_assigned: true, is_under_warranty: false },
+]
+
+export const MOCK_UNIT_TYPES = [
+  { id: 'ut-001', name: 'Studio', code: 'STUDIO', description: 'Unité autonome louable', is_composite: false, is_rentable: true, color_display: '#0f766e', sort_order: 1, units_count: 4, is_active: true },
+  { id: 'ut-002', name: 'Appartement T2', code: 'T2', description: 'Appartement deux pièces', is_composite: true, is_rentable: true, color_display: '#0369a1', sort_order: 2, units_count: 1, is_active: true },
+]
+
+export const MOCK_UNIT_FEATURES = [
+  { id: 'uf-001', unit: 'u-001', feature_name: 'Climatisation', feature_type: 'BOOLEAN', feature_value: 'true', formatted_value: 'Oui', display_order: 1, is_active: true },
+  { id: 'uf-002', unit: 'u-001', feature_name: 'Balcon', feature_type: 'BOOLEAN', feature_value: 'false', formatted_value: 'Non', display_order: 2, is_active: true },
+]
+
+export const MOCK_STATUS_HISTORY = [
+  { id: 'ush-001', unit: 'u-001', unit_name: 'A-001 · Studio A1', old_status: 'AVAILABLE', new_status: 'OCCUPIED', changed_by: 'u-admin', changed_by_name: 'Admin Eureka', change_date: '2026-09-01T08:00:00Z', notes: 'Occupation activée', is_active: true, created_at: '2026-09-01T08:00:00Z' },
+]
+
+export const MOCK_ROOM_ASSETS = [
+  { id: 'ra-001', managed_unit: 'u-001', unit_identifier: 'A-001', code: 'WALL-01', asset_type: 'WALL_FLOOR', asset_type_display: 'Murs, sol et carrelage', name: 'Peinture des murs', description: 'Revêtement mural de la pièce principale' },
+  { id: 'ra-002', managed_unit: 'u-001', unit_identifier: 'A-001', code: 'SAN-01', asset_type: 'SANITARY', asset_type_display: 'Sanitaires', name: 'Lavabo', description: 'Lavabo et robinetterie' },
+]
+
+export const MOCK_EQUIPMENTS = [
+  { id: 'eq-001', technical_reference: 'CLI-2026-SAM-00001', template: 'i-001', template_name: 'Climatisation 9000 BTU', designation: 'Climatiseur chambre A-001', brand: 'Samsung', model_name: 'AR9500T', serial_number: 'SN-001', condition: 'B', condition_display: 'Bon', status: 'ASSIGNED', status_display: 'Assigné', is_assigned: true, purchase_date: '2026-01-10', acquisition_year: 2026, warranty_end_date: '2028-01-10', notes: '', purchase_price: '350000.00', ancillary_cost: '15000.00', cost_price: '365000.00', disposal_amount: '0.00', created_at: '2026-01-10T08:00:00Z' },
+  { id: 'eq-002', technical_reference: 'VEN-2026-BEL-00002', template: 'i-003', template_name: 'Ventilateur plafond', designation: 'Ventilateur de réserve', brand: 'Belling', model_name: 'Breeze', serial_number: 'SN-002', condition: 'TB', condition_display: 'Très bon', status: 'IN_STOCK', status_display: 'En stock', is_assigned: false, purchase_date: '2026-02-01', acquisition_year: 2026, warranty_end_date: null, notes: '', purchase_price: '45000.00', ancillary_cost: '0.00', cost_price: '45000.00', disposal_amount: '0.00', created_at: '2026-02-01T08:00:00Z' },
+]
+
+export const MOCK_INVOICES = [
+  { id: 'inv-001', invoice_number: 'FAC-2026-001', supplier_name: 'Equipements Cameroun', invoice_date: '2026-02-01', total_amount: '45000.00', calculated_total: '45000.00', file_attachment: null, file_url: null, uploaded_by: 'u-admin', uploaded_by_name: 'Admin Eureka', status: 'ACTIVE', voided_at: null, voided_by: null, void_reason: '', replacement_invoice: null, equipment_lines: [{ id: 'line-001', equipment: 'eq-002', technical_reference: 'VEN-2026-BEL-00002', equipment_category: 'APPLIANCE', unit_purchase_price: '45000.00' }], created_at: '2026-02-01T09:00:00Z' },
+]
+
+export const MOCK_PATRIMOINE_INTERVENTIONS = [
+  { id: 'pi-001', unit: 'u-004', unit_name: 'A-201 · T3 A201', title: 'Contrôle installation électrique', category: 'ELECTRICAL', priority: 'HIGH', status: 'PENDING', requested_by: 'u-admin', requested_by_name: 'Admin Eureka', assigned_to: null, assigned_to_name: null, request_date: '2026-09-29T08:00:00Z', scheduled_date: '2026-10-02T09:00:00Z', completion_date: null, estimated_cost: null, actual_cost: null, is_overdue: false, is_active: true },
 ]

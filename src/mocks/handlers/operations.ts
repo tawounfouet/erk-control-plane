@@ -1,37 +1,65 @@
 import { http, HttpResponse } from 'msw'
-import { MOCK_OPERATIONS, MOCK_OPERATION_DETAIL, MOCK_OPERATION_STATS } from '@/mocks/fixtures/operations'
+import { MOCK_OPERATION_ATTACHMENTS, MOCK_OPERATION_CATEGORIES, MOCK_OPERATION_COMMENTS, MOCK_OPERATION_DETAIL, MOCK_OPERATION_HISTORY, MOCK_OPERATION_NOTIFICATIONS, MOCK_OPERATION_STATS, MOCK_OPERATION_TYPES, MOCK_OPERATIONS } from '@/mocks/fixtures/operations'
+
+const page = <T,>(results: T[]) => ({ count: results.length, next: null, previous: null, results })
+const detail = (id = 'o-001') => ({ ...MOCK_OPERATION_DETAIL, ...(MOCK_OPERATIONS.find((item) => item.id === id) ?? {}), operation_number: 'OP-2026-0001', requester_name: 'Marie Ndiaye', requester: 'u-user-2', status_display: 'En cours', priority_display: 'Urgente', is_overdue: true, due_date: '2026-07-01', comments: MOCK_OPERATION_COMMENTS, history_logs: MOCK_OPERATION_HISTORY })
 
 export const operationsHandlers = [
-  http.get('/api/operations/operations/', ({ request }) => {
-    const url = new URL(request.url)
-    const status = url.searchParams.get('status')
-    let results = MOCK_OPERATIONS
-    if (status) results = results.filter((o) => o.status === status)
-    return HttpResponse.json({ count: results.length, next: null, previous: null, results })
-  }),
+  http.get('/api/operations/categories/', () => HttpResponse.json(page(MOCK_OPERATION_CATEGORIES))),
+  http.post('/api/operations/categories/', async ({ request }) => HttpResponse.json({ ...MOCK_OPERATION_CATEGORIES[0], id: 'cat-new', ...(await request.json() as object) }, { status: 201 })),
+  http.get('/api/operations/categories/active/', () => HttpResponse.json(MOCK_OPERATION_CATEGORIES)),
+  http.get('/api/operations/categories/:id/operation_types/', () => HttpResponse.json(MOCK_OPERATION_TYPES)),
+  http.get('/api/operations/categories/:id/', () => HttpResponse.json(MOCK_OPERATION_CATEGORIES[0])),
+  http.patch('/api/operations/categories/:id/', async ({ request }) => HttpResponse.json({ ...MOCK_OPERATION_CATEGORIES[0], ...(await request.json() as object) })),
+  http.delete('/api/operations/categories/:id/', () => new HttpResponse(null, { status: 204 })),
+  http.get('/api/operations/types/', () => HttpResponse.json(page(MOCK_OPERATION_TYPES))),
+  http.post('/api/operations/types/', async ({ request }) => HttpResponse.json({ ...MOCK_OPERATION_TYPES[0], id: 'type-new', ...(await request.json() as object) }, { status: 201 })),
+  http.get('/api/operations/types/by_category/', () => HttpResponse.json(MOCK_OPERATION_TYPES)),
+  http.get('/api/operations/types/requiring_approval/', () => HttpResponse.json([])),
+  http.get('/api/operations/types/:id/', () => HttpResponse.json(MOCK_OPERATION_TYPES[0])),
+  http.patch('/api/operations/types/:id/', async ({ request }) => HttpResponse.json({ ...MOCK_OPERATION_TYPES[0], ...(await request.json() as object) })),
+  http.delete('/api/operations/types/:id/', () => new HttpResponse(null, { status: 204 })),
 
-  http.get('/api/operations/operations/:id/', ({ params }) => {
-    if (params.id === 'o-001') return HttpResponse.json(MOCK_OPERATION_DETAIL)
-    const op = MOCK_OPERATIONS.find((o) => o.id === params.id)
-    if (!op) return new HttpResponse(null, { status: 404 })
-    return HttpResponse.json(op)
-  }),
+  http.get('/api/operations/operations/', ({ request }) => { const status = new URL(request.url).searchParams.get('status'); return HttpResponse.json(page(status ? MOCK_OPERATIONS.filter((item) => item.status === status) : MOCK_OPERATIONS)) }),
+  http.post('/api/operations/operations/', async ({ request }) => HttpResponse.json({ ...detail(), id: 'o-new', ...(await request.json() as object) }, { status: 201 })),
+  ...['my_operations', 'my_requests', 'assigned_to_me', 'pending', 'in_progress', 'overdue', 'high_priority'].map((action) => http.get(`/api/operations/operations/${action}/`, () => HttpResponse.json(MOCK_OPERATIONS))),
+  ...['by_unit', 'by_building', 'by_residence'].map((action) => http.get(`/api/operations/operations/${action}/`, () => HttpResponse.json(MOCK_OPERATIONS))),
+  http.get('/api/operations/operations/statistics/', () => HttpResponse.json(MOCK_OPERATION_STATS)),
+  http.get('/api/operations/operations/:id/', ({ params }) => HttpResponse.json(detail(String(params.id)))),
+  http.patch('/api/operations/operations/:id/', async ({ params, request }) => HttpResponse.json({ ...detail(String(params.id)), ...(await request.json() as object) })),
+  http.delete('/api/operations/operations/:id/', () => new HttpResponse(null, { status: 204 })),
+  http.post('/api/operations/operations/:id/assign/', () => HttpResponse.json({ ...detail(), assigned_to: 'u-staff', assigned_to_name: 'Agent Technique' })),
+  http.post('/api/operations/operations/:id/start/', () => HttpResponse.json({ ...detail(), status: 'IN_PROGRESS' })),
+  http.post('/api/operations/operations/:id/complete/', () => HttpResponse.json({ ...detail(), status: 'COMPLETED' })),
+  http.post('/api/operations/operations/:id/cancel/', () => HttpResponse.json({ ...detail(), status: 'CANCELLED' })),
+  http.post('/api/operations/operations/:id/change_status/', async ({ request }) => HttpResponse.json({ ...detail(), status: (await request.json() as { new_status: string }).new_status })),
 
-  http.get('/api/operations/operations/my_operations/', () =>
-    HttpResponse.json(MOCK_OPERATIONS)),
+  http.get('/api/operations/comments/', () => HttpResponse.json(page(MOCK_OPERATION_COMMENTS))),
+  http.post('/api/operations/comments/', async ({ request }) => HttpResponse.json({ ...MOCK_OPERATION_COMMENTS[0], id: 'comment-new', ...(await request.json() as object) }, { status: 201 })),
+  http.get('/api/operations/comments/by_operation/', () => HttpResponse.json(MOCK_OPERATION_COMMENTS)),
+  http.get('/api/operations/comments/:id/replies/', () => HttpResponse.json([])),
+  http.get('/api/operations/comments/:id/', () => HttpResponse.json(MOCK_OPERATION_COMMENTS[0])),
+  http.patch('/api/operations/comments/:id/', async ({ request }) => HttpResponse.json({ ...MOCK_OPERATION_COMMENTS[0], ...(await request.json() as object) })),
+  http.delete('/api/operations/comments/:id/', () => new HttpResponse(null, { status: 204 })),
+  http.get('/api/operations/notifications/', () => HttpResponse.json(page(MOCK_OPERATION_NOTIFICATIONS))),
+  http.post('/api/operations/notifications/', async ({ request }) => HttpResponse.json({ ...MOCK_OPERATION_NOTIFICATIONS[0], id: 'notification-new', ...(await request.json() as object) }, { status: 201 })),
+  http.get('/api/operations/notifications/unread/', () => HttpResponse.json(MOCK_OPERATION_NOTIFICATIONS)),
+  http.post('/api/operations/notifications/mark_all_as_read/', () => HttpResponse.json({ message: '1 notifications marquées comme lues' })),
+  http.get('/api/operations/notifications/:id/', () => HttpResponse.json(MOCK_OPERATION_NOTIFICATIONS[0])),
+  http.patch('/api/operations/notifications/:id/', async ({ request }) => HttpResponse.json({ ...MOCK_OPERATION_NOTIFICATIONS[0], ...(await request.json() as object) })),
+  http.post('/api/operations/notifications/:id/mark_as_read/', () => HttpResponse.json({ ...MOCK_OPERATION_NOTIFICATIONS[0], is_read: true })),
+  http.delete('/api/operations/notifications/:id/', () => new HttpResponse(null, { status: 204 })),
 
-  http.get('/api/operations/operations/assigned_to_me/', () =>
-    HttpResponse.json(MOCK_OPERATIONS.filter((o) => o.assigned_to_name))),
-
-  http.get('/api/operations/operations/pending/', () =>
-    HttpResponse.json(MOCK_OPERATIONS.filter((o) => o.status === 'PENDING_VALIDATION'))),
-
-  http.get('/api/operations/operations/in_progress/', () =>
-    HttpResponse.json(MOCK_OPERATIONS.filter((o) => o.status === 'IN_PROGRESS'))),
-
-  http.get('/api/operations/operations/overdue/', () =>
-    HttpResponse.json(MOCK_OPERATIONS.filter((o) => o.priority === 'URGENT'))),
-
-  http.get('/api/operations/operations/statistics/', () =>
-    HttpResponse.json(MOCK_OPERATION_STATS)),
+  http.get('/api/operations/attachments/', () => HttpResponse.json(page(MOCK_OPERATION_ATTACHMENTS))),
+  http.post('/api/operations/attachments/', async ({ request }) => HttpResponse.json({ ...MOCK_OPERATION_ATTACHMENTS[0], id: 'attachment-new', ...(await request.json() as object) }, { status: 201 })),
+  ...['by_operation', 'by_type', 'images', 'evidence_photos', 'user_uploads', 'manager_uploads', 'documents'].map((action) => http.get(`/api/operations/attachments/${action}/`, () => HttpResponse.json(MOCK_OPERATION_ATTACHMENTS))),
+  http.post('/api/operations/attachments/upload/', () => HttpResponse.json({ ...MOCK_OPERATION_ATTACHMENTS[0], id: 'attachment-new' }, { status: 201 })),
+  http.post('/api/operations/attachments/bulk-upload/', () => HttpResponse.json({ message: '2 photo(s) ajoutée(s)', attachments: MOCK_OPERATION_ATTACHMENTS }, { status: 201 })),
+  http.get('/api/operations/attachments/:id/', () => HttpResponse.json(MOCK_OPERATION_ATTACHMENTS[0])),
+  http.patch('/api/operations/attachments/:id/', async ({ request }) => HttpResponse.json({ ...MOCK_OPERATION_ATTACHMENTS[0], ...(await request.json() as object) })),
+  http.delete('/api/operations/attachments/:id/', () => new HttpResponse(null, { status: 204 })),
+  http.get('/api/operations/history/', () => HttpResponse.json(page(MOCK_OPERATION_HISTORY))),
+  http.get('/api/operations/history/by_operation/', () => HttpResponse.json(MOCK_OPERATION_HISTORY)),
+  http.get('/api/operations/history/my_actions/', () => HttpResponse.json(MOCK_OPERATION_HISTORY)),
+  http.get('/api/operations/history/:id/', () => HttpResponse.json(MOCK_OPERATION_HISTORY[0])),
 ]

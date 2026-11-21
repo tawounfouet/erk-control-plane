@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw'
 import type { UserDetail } from '@/lib/types/admin.types'
 import {
   MOCK_USERS,
+  MOCK_USER_DETAILS,
   MOCK_USER_SESSIONS,
   MOCK_STUDENT_PROFILES,
   MOCK_AUDIT_LOGS,
@@ -43,7 +44,7 @@ export const adminHandlers = [
   http.get('/api/auth/users/:id/', ({ params }) => {
     const user = MOCK_USERS.find((u) => u.id === params.id)
     if (!user) return HttpResponse.json({ detail: 'Not found' }, { status: 404 })
-    return HttpResponse.json(user)
+    return HttpResponse.json({ ...user, ...MOCK_USER_DETAILS[user.id] })
   }),
 
   http.post('/api/auth/users/', async ({ request }) => {
@@ -77,16 +78,31 @@ export const adminHandlers = [
     return HttpResponse.json(user)
   }),
 
-  http.post('/api/auth/users/:id/reset_password/', () =>
-    HttpResponse.json({ detail: 'Password reset email sent' })),
+  http.post('/api/auth/users/:id/activate-account/', ({ params }) => {
+    const user = MOCK_USERS.find((u) => u.id === params.id)
+    if (!user) return HttpResponse.json({ detail: 'Not found' }, { status: 404 })
+    user.is_active = true
+    return HttpResponse.json(user)
+  }),
+
+  http.post('/api/auth/users/:id/suspend-account/', ({ params }) => {
+    const user = MOCK_USERS.find((u) => u.id === params.id)
+    if (!user) return HttpResponse.json({ detail: 'Not found' }, { status: 404 })
+    user.is_active = false
+    return HttpResponse.json(user)
+  }),
+
+  http.post('/api/auth/users/reset_password/', () =>
+    new HttpResponse(null, { status: 204 })),
 
   // User Sessions
-  http.get('/api/auth/users/:userId/sessions/', ({ params }) => {
-    const sessions = MOCK_USER_SESSIONS.filter((s) => s.user === params.userId)
+  http.get('/api/auth/sessions/', ({ request }) => {
+    const userId = new URL(request.url).searchParams.get('user')
+    const sessions = MOCK_USER_SESSIONS.filter((s) => !userId || s.user === userId)
     return HttpResponse.json(paginate(sessions))
   }),
 
-  http.delete('/api/auth/sessions/:sessionId/', ({ params }) => {
+  http.post('/api/auth/sessions/:sessionId/revoke/', ({ params }) => {
     const idx = MOCK_USER_SESSIONS.findIndex((s) => s.id === params.sessionId)
     if (idx !== -1) MOCK_USER_SESSIONS.splice(idx, 1)
     return HttpResponse.json({ detail: 'Session terminated' })
