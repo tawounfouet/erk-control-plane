@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { resetPassword } from '@/lib/api/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function ResetPasswordPage() {
@@ -58,9 +59,11 @@ export function ResetPasswordPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Email</label>
+              <Label htmlFor="reset-email">Adresse e-mail</Label>
               <Input
+                id="reset-email"
                 type="email"
+                autoComplete="email"
                 placeholder="email@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -68,10 +71,10 @@ export function ResetPasswordPage() {
               />
             </div>
             {error && (
-              <p className="text-sm text-destructive">{error}</p>
+              <p className="text-sm text-destructive" role="alert" aria-live="assertive">{error}</p>
             )}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Envoi...' : 'Envoyer le lien'}
+            <Button type="submit" className="w-full" disabled={loading} aria-busy={loading}>
+              {loading ? 'Envoi…' : 'Envoyer le lien'}
             </Button>
             <p className="text-center text-sm text-muted-foreground">
               <Link to="/login" className="hover:underline">Retour à la connexion</Link>
