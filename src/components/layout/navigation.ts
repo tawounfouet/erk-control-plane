@@ -1,8 +1,8 @@
 import {
   Activity, AlertTriangle, Building2, ClipboardCheck, ClipboardList, DoorOpen,
   Download, FileSearch, FileText, GraduationCap, Image, Kanban, LayoutDashboard,
-  MessageSquare, Package, Phone, Search, Settings, Shield, Upload, UserCog,
-  Users, Wrench, type LucideIcon,
+  ListTree, MessageSquare, Package, PackageCheck, Phone, ReceiptText, Search,
+  Settings, Shield, Upload, UserCog, Users, Wrench, type LucideIcon,
 } from 'lucide-react'
 
 export interface NavigationItem {
@@ -27,12 +27,15 @@ export const navigationGroups: NavigationGroup[] = [
     { title: 'Bâtiments', path: '/buildings', icon: Building2 },
     { title: 'Logements', path: '/units', icon: DoorOpen },
     { title: 'Inventaire', path: '/inventory', icon: Package },
+    { title: 'Stock physique', path: '/patrimoine/equipments', icon: PackageCheck },
     { title: 'Affectations', path: '/inventory/assignments', icon: ClipboardList },
+    { title: 'Registre technique', path: '/patrimoine/registry', icon: ListTree },
+    { title: 'Maintenance historique', path: '/patrimoine/interventions', icon: Wrench },
   ] },
   { label: 'Vie locative', items: [
     { title: 'Locataires', path: '/tenants', icon: Users },
     { title: 'Documents', path: '/documents', icon: FileText },
-    { title: 'États des lieux', path: '/admin/condition-reports', icon: ClipboardCheck },
+    { title: 'Registre locatif', path: '/rental/control', icon: ClipboardCheck },
   ] },
   { label: 'Interventions', items: [
     { title: 'Maintenance', path: '/operations', icon: Wrench },
@@ -54,6 +57,7 @@ export const navigationGroups: NavigationGroup[] = [
     { title: 'Importer', path: '/admin/import', icon: Upload },
     { title: 'Exporter', path: '/admin/export', icon: Download },
     { title: 'Actions groupées', path: '/admin/batch', icon: AlertTriangle },
+    { title: 'Factures fournisseur', path: '/admin/invoices', icon: ReceiptText },
   ] },
 ]
 
