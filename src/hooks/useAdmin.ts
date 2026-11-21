@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import * as api from '@/lib/api/admin'
+import * as sessionsApi from '@/lib/api/sessions'
 import type {
   UserDetail,
 } from '@/lib/types/admin.types'
@@ -45,16 +46,21 @@ export function useActivateUser() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: ({ id, active }: { id: string; active: boolean }) => api.activateUser(id, active),
-    onSuccess: () => {
+    onSuccess: (user) => {
       qc.invalidateQueries({ queryKey: [ADMIN_QUERY_KEY, 'users'] })
+      qc.setQueryData([ADMIN_QUERY_KEY, 'users', user.id], user)
     },
   })
+}
+
+export function useResetUserPassword() {
+  return useMutation({ mutationFn: api.resetUserPassword })
 }
 
 export function useUserSessions(userId: string) {
   return useQuery({
     queryKey: [ADMIN_QUERY_KEY, 'users', userId, 'sessions'],
-    queryFn: () => api.listUserSessions(userId),
+    queryFn: () => sessionsApi.listUserSessions(userId),
     enabled: !!userId,
   })
 }
@@ -62,7 +68,7 @@ export function useUserSessions(userId: string) {
 export function useTerminateSession() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: api.terminateSession,
+    mutationFn: sessionsApi.revokeSession,
     onSuccess: () => qc.invalidateQueries({ queryKey: [ADMIN_QUERY_KEY, 'users'] }),
   })
 }

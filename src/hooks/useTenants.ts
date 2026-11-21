@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { listTenants, getTenant, getActiveTenants, getTenantStatistics, listDocuments, getExpiredDocuments, listRentalActions } from '@/lib/api/rental'
+import { listTenants, getTenant, getActiveTenants, getTenantStatistics, listDocuments, getExpiredDocuments } from '@/lib/api/rental'
 import { queryKeys } from '@/lib/query-client'
 
 export function useTenants(params?: Record<string, string>) {
@@ -33,21 +33,14 @@ export function useTenantStatistics() {
 
 export function useTenantDocuments(params?: Record<string, string>) {
   return useQuery({
-    queryKey: [...queryKeys.rental.tenants, 'documents', params],
+    queryKey: [...queryKeys.rental.documents, params],
     queryFn: () => listDocuments(params),
   })
 }
 
 export function useExpiredDocuments() {
   return useQuery({
-    queryKey: [...queryKeys.rental.tenants, 'documents', 'expired'],
+    queryKey: [...queryKeys.rental.documents, 'expired'],
     queryFn: getExpiredDocuments,
-  })
-}
-
-export function useRentalActions(params?: Record<string, string>) {
-  return useQuery({
-    queryKey: [...queryKeys.rental.tenants, 'actions', params],
-    queryFn: () => listRentalActions(params),
   })
 }

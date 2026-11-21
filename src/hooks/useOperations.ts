@@ -1,6 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
-import { listOperations, getOperation, getMyOperations, getAssignedToMe, getPendingOperations, getOverdueOperations, getOperationStats, listCategories, getCommentsByOperation, getHistoryByOperation } from '@/lib/api/operations'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { createOperation, listOperations, getOperation, getMyOperations, getAssignedToMe, getPendingOperations, getOverdueOperations, getOperationStats, listCategories, listOperationTypes, getCommentsByOperation, getHistoryByOperation } from '@/lib/api/operations'
 import { queryKeys } from '@/lib/query-client'
+import type { OperationWritePayload } from '@/lib/types/operations.types'
 
 export function useOperations(params?: Record<string, string>) {
   return useQuery({
@@ -57,6 +58,15 @@ export function useOperationCategories() {
     queryKey: [...queryKeys.operations.all, 'categories'],
     queryFn: listCategories,
   })
+}
+
+export function useOperationTypes() {
+  return useQuery({ queryKey: [...queryKeys.operations.all, 'types'], queryFn: () => listOperationTypes() })
+}
+
+export function useCreateOperation() {
+  const client = useQueryClient()
+  return useMutation({ mutationFn: (payload: OperationWritePayload) => createOperation(payload), onSuccess: () => client.invalidateQueries({ queryKey: queryKeys.operations.all }) })
 }
 
 export function useOperationComments(operationId: string) {
