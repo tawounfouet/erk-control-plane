@@ -29,7 +29,13 @@ export const queryKeys = {
   },
   rental: {
     tenants: ['rental', 'tenants'] as const,
+    occupations: ['rental', 'occupations'] as const,
     tenant: (id: string) => ['rental', 'tenants', id] as const,
+    documents: ['rental', 'documents'] as const,
+    actions: ['rental', 'actions'] as const,
+    meters: ['rental', 'meter-readings'] as const,
+    inspections: ['rental', 'inspections'] as const,
+    acceptances: ['rental', 'acceptances'] as const,
   },
   operations: {
     all: ['operations'] as const,

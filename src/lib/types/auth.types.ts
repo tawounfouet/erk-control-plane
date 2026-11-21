@@ -19,11 +19,13 @@ export interface LoginRequest {
 export interface LoginResponse {
   access: string
   refresh: string
+  session_id?: string
   user?: User
 }
 
 export interface TokenRefresh {
   access: string
+  refresh?: string
 }
 
 export interface TokenVerify {

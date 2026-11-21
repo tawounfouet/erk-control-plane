@@ -237,3 +237,154 @@ export interface Intervention {
   is_overdue: boolean
   is_active: boolean
 }
+
+export interface InterventionDetail extends Intervention {
+  unit_details: UnitMinimal
+  inventory_item: string | null
+  inventory_item_details: InventoryItem | null
+  description: string
+  start_date: string | null
+  before_images_details: MediaFile[]
+  after_images_details: MediaFile[]
+  documents_details: MediaFile[]
+  resolution: string
+  technical_notes: string
+  duration: number | null
+  time_since_request: number | null
+  created_at: string
+  updated_at: string
+}
+
+export interface InterventionStatistics {
+  total: number
+  by_status: Record<string, number>
+  by_priority: Record<string, number>
+  by_category: Record<string, number>
+}
+
+export interface UnitStatusHistory {
+  id: string
+  unit: string
+  unit_name: string
+  old_status: UnitStatus
+  new_status: UnitStatus
+  changed_by: string | null
+  changed_by_name: string | null
+  change_date: string
+  notes: string
+  is_active: boolean
+  created_at: string
+}
+
+export interface UnitHierarchy {
+  unit: UnitDetail
+  path: string
+  children: UnitMinimal[]
+}
+
+export interface RoomAsset {
+  id: string
+  managed_unit: string
+  unit_identifier: string
+  code: string
+  asset_type: string
+  asset_type_display: string
+  name: string
+  description: string
+}
+
+export interface Equipment {
+  id: string
+  technical_reference: string
+  template: string
+  template_name: string
+  designation: string
+  brand: string
+  model_name: string
+  serial_number: string | null
+  condition: EquipmentCondition
+  condition_display: string
+  status: EquipmentStatus
+  status_display: string
+  is_assigned: boolean
+  purchase_date: string | null
+  acquisition_year: number
+  warranty_end_date: string | null
+  notes: string
+  purchase_price?: string
+  ancillary_cost?: string
+  cost_price?: string
+  disposal_amount?: string
+  created_at: string
+}
+
+export type EquipmentCondition = 'TB' | 'B' | 'M' | 'D' | 'HS'
+export type EquipmentStatus = 'IN_STOCK' | 'ASSIGNED' | 'OUT_OF_INVENTORY'
+
+export interface EquipmentCreateInput {
+  template: string
+  designation?: string
+  brand?: string
+  model_name?: string
+  serial_number?: string
+  condition?: EquipmentCondition
+  purchase_price?: string
+  ancillary_cost?: string
+  purchase_date?: string | null
+  acquisition_year?: number
+  warranty_end_date?: string | null
+  notes?: string
+}
+
+export interface EquipmentUpdateInput {
+  designation?: string
+  brand?: string
+  model_name?: string
+  serial_number?: string | null
+  warranty_end_date?: string | null
+  notes?: string
+}
+
+export interface EquipmentAssignInput {
+  managed_unit: string
+  occupation?: string | null
+  entry_condition?: EquipmentCondition
+  notes?: string
+}
+
+export interface InvoiceLine {
+  id: string
+  equipment: string
+  technical_reference: string
+  equipment_category: string
+  unit_purchase_price: string
+}
+
+export interface Invoice {
+  id: string
+  invoice_number: string
+  supplier_name: string
+  invoice_date: string
+  total_amount: string
+  calculated_total: string
+  file_attachment: string | null
+  file_url: string | null
+  uploaded_by: string
+  uploaded_by_name: string | null
+  status: 'ACTIVE' | 'CANCELLED' | 'REPLACED'
+  voided_at: string | null
+  voided_by: string | null
+  void_reason: string
+  replacement_invoice: string | null
+  equipment_lines: InvoiceLine[]
+  created_at: string
+}
+
+export interface InvoiceCreateInput {
+  invoice_number: string
+  supplier_name: string
+  invoice_date: string
+  total_amount?: string | null
+  file_attachment?: string | null
+  lines: Array<{ equipment: string; unit_purchase_price: string }>
+}

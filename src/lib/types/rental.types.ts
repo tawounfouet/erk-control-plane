@@ -108,3 +108,151 @@ export interface RentalAction {
   metadata: Record<string, unknown>
   created_at: string
 }
+
+export interface TenantWritePayload {
+  user_id: string
+  current_unit_id?: string | null
+  move_in_date?: string | null
+  move_out_date?: string | null
+  emergency_contact_name?: string | null
+  emergency_contact_phone?: string | null
+  notes?: string
+}
+
+export interface TenantDocumentWritePayload {
+  tenant?: string
+  document_id?: string
+  document_type?: string
+  expires_at?: string | null
+  notes?: string
+}
+
+export type MeterType = 'ELECTRICITY' | 'WATER'
+export type ReadingType = 'ENTRY' | 'INTERMEDIATE' | 'EXIT'
+
+export interface MeterReading {
+  id: string
+  occupation: string
+  unit_identifier: string
+  meter_type: MeterType
+  meter_type_display: string
+  reading_type: ReadingType
+  reading_type_display: string
+  value: string
+  reading_date: string
+  recorded_by: string | null
+  recorded_by_name: string | null
+}
+
+export interface MeterReadingWritePayload {
+  occupation: string
+  meter_type: MeterType
+  reading_type: ReadingType
+  value: string
+  reading_date: string
+}
+
+export type InspectionType = 'ENTRY' | 'INTERMEDIATE' | 'EXIT'
+
+export interface InspectionLine {
+  id: string
+  inspection: string
+  equipment_assignment: string | null
+  room_asset: string | null
+  equipment_reference: string | null
+  source_type: 'equipment' | 'room_asset' | null
+  condition: string
+  condition_display: string
+  observation: string
+  imputed_amount: string
+}
+
+export interface InspectionLineWritePayload {
+  condition: string
+  equipment_assignment?: string | null
+  room_asset?: string | null
+  imputed_amount?: string
+  observation?: string
+}
+
+export interface InspectionSession {
+  id: string
+  occupation: string
+  unit_identifier: string
+  inspection_type: InspectionType
+  inspection_type_display: string
+  inspection_date: string
+  conducted_by: string
+  conducted_by_name: string | null
+  general_observations: string
+  closed_at: string | null
+  lines: InspectionLine[]
+  created_at: string
+}
+
+export interface InspectionWritePayload {
+  occupation: string
+  inspection_type: InspectionType
+  inspection_date: string
+  general_observations?: string
+  lines?: InspectionLineWritePayload[]
+}
+
+export interface AcceptedItemSnapshot {
+  id: string
+  equipment_reference: string
+  designation: string
+  condition_at_acceptance: string
+  observations: string
+}
+
+export interface AcceptanceSignature {
+  id: string
+  resident: string
+  signed_by_name: string
+  signed_at: string
+  signature_svg: string
+}
+
+export interface AcceptanceBatch {
+  id: string
+  occupation: string
+  unit_identifier: string
+  batch_type: 'INITIAL' | 'INCREMENTAL'
+  batch_type_display: string
+  content_hash: string
+  is_fully_accepted: boolean
+  items: AcceptedItemSnapshot[]
+  signatures: AcceptanceSignature[]
+  created_at: string
+}
+
+export interface AcceptanceSignPayload {
+  resident: string
+  signature_svg: string
+  ip_address?: string | null
+  user_agent?: string
+}
+
+export interface OccupationResident {
+  id: string
+  tenant: string
+  tenant_name: string
+  tenant_email: string
+  negotiated_rent: string
+  security_deposit: string
+  imputed_total: string
+}
+
+export interface Occupation {
+  id: string
+  managed_unit: string
+  unit_identifier: string
+  start_date: string
+  end_date: string | null
+  is_current: boolean
+  is_validated: boolean
+  validated_at: string | null
+  resident_count: number
+  residents: OccupationResident[]
+}

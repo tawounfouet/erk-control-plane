@@ -120,4 +120,44 @@ export interface OperationStats {
   by_status: Record<string, number>
   by_priority: Record<string, number>
   overdue: number
+  assigned_to_me?: number
+  requested_by_me?: number
+}
+
+export type OperationWritePayload = Partial<Pick<Operation, 'title' | 'description' | 'priority' | 'due_date' | 'managed_unit' | 'tags' | 'is_active'>> & {
+  operation_type?: string
+  operation_type_code?: string
+}
+
+export interface OperationNotification {
+  id: string
+  operation: string | null
+  title: string
+  message: string
+  notification_type: string
+  operation_notification_type: string
+  is_read: boolean
+  read_at: string | null
+  created_at: string
+}
+
+export interface OperationAttachment {
+  id: string
+  operation: string
+  media_file: string
+  attachment_type: string
+  attachment_type_display: string
+  attachment_category: string
+  is_user_upload: boolean
+  is_manager_upload: boolean
+  is_required: boolean
+  is_confidential: boolean
+  tags: string
+  notes: string
+  sort_order: number
+  file_url: string
+  file_extension: string
+  is_image: boolean
+  is_document: boolean
+  created_at: string
 }

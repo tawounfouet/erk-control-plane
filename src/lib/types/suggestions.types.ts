@@ -107,3 +107,9 @@ export interface SuggestionStatistics {
   without_responses: number
   recent_30_days: number
 }
+
+export interface SuggestionMutationResponse<T> {
+  success: boolean
+  message: string
+  data: T
+}
