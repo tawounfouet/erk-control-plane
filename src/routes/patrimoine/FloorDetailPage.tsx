@@ -22,7 +22,7 @@ export function FloorDetailPage() {
       <div className="grid gap-4 sm:grid-cols-3">
         <Card><CardContent className="flex items-center gap-3 p-5"><Layers3 aria-hidden="true" className="text-primary" /><div><p className="text-xs uppercase tracking-wider text-muted-foreground">Niveau</p><p className="text-xl font-semibold">{floor.number}</p></div></CardContent></Card>
         <Card><CardContent className="flex items-center gap-3 p-5"><DoorOpen aria-hidden="true" className="text-primary" /><div><p className="text-xs uppercase tracking-wider text-muted-foreground">Unités</p><p className="text-xl font-semibold">{floor.units_count}</p></div></CardContent></Card>
-        <Card><CardContent className="flex items-center gap-3 p-5"><Ruler aria-hidden="true" className="text-primary" /><div><p className="text-xs uppercase tracking-wider text-muted-foreground">Surface</p><p className="text-xl font-semibold">{floor.area_m2 ? `${floor.area_m2} m²` : '—'}</p></div></CardContent></Card>
+        <Card><CardContent className="flex items-center gap-3 p-5"><Ruler aria-hidden="true" className="text-primary" /><div><p className="text-xs uppercase tracking-wider text-muted-foreground">Surface</p><p className="text-xl font-semibold">{floor.area_m2 ? `${floor.area_m2} m²` : '-'}</p></div></CardContent></Card>
       </div>
       <Card>
         <CardHeader><CardTitle>Unités de l’étage</CardTitle></CardHeader>

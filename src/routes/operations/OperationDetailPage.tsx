@@ -116,7 +116,7 @@ export function OperationDetailPage() {
               <div className="rounded-lg border bg-card p-4 text-sm">
                 <p>{op.managed_unit_details.identifier}</p>
                 <p className="text-muted-foreground">
-                  {op.managed_unit_details.building_name} — {op.managed_unit_details.floor_code}
+                  {op.managed_unit_details.building_name} - {op.managed_unit_details.floor_code}
                 </p>
                 <Link
                   to={`/units/${op.managed_unit_details.id}`}

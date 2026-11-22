@@ -79,7 +79,7 @@ export function DocumentsPage() {
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {doc.document_type_display}
-                        {doc.tenant && ` — Locataire #${doc.tenant}`}
+                        {doc.tenant && ` - Locataire #${doc.tenant}`}
                       </p>
                     </div>
                   </div>

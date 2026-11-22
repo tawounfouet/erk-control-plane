@@ -59,7 +59,7 @@ export function UnitDetailPage() {
 
       <PageHeader
         title={unit.full_name}
-        description={`${unit.building_name} — ${unit.floor_code}`}
+        description={`${unit.building_name} - ${unit.floor_code}`}
       />
       <div className="mb-4">
         <UnitStatusBadge status={unit.current_status} />

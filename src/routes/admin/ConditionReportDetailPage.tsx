@@ -34,7 +34,7 @@ export function ConditionReportDetailPage() {
           </Button>
         </Link>
         <PageHeader
-          title={`État des lieux — ${report.unit_number}`}
+          title={`État des lieux - ${report.unit_number}`}
           description={`${report.report_type === 'entry' ? 'Entrée' : 'Sortie'} · ${new Date(report.created_at).toLocaleDateString('fr-FR')}`}
         />
         <div className="ml-auto flex gap-2">
@@ -123,10 +123,10 @@ export function ConditionReportDetailPage() {
                         {item.state_after ? (
                           <Badge variant="outline">{item.state_after}</Badge>
                         ) : (
-                          '—'
+                          '-'
                         )}
                       </td>
-                      <td className="px-3 py-2 text-muted-foreground">{item.comments || '—'}</td>
+                      <td className="px-3 py-2 text-muted-foreground">{item.comments || '-'}</td>
                     </tr>
                   ))}
                 </tbody>

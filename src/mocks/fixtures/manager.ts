@@ -35,7 +35,7 @@ export const MOCK_GLOBAL_SEARCH = {
   count: 3,
   results: [
     { type: 'tenant', id: 't-001', label: 'Jean Dupont (jean.dupont@email.com)', url: '/api/rental/tenants/t-001/' },
-    { type: 'unit', id: 'u-001', label: 'A-001 — Studio A1', url: '/api/patrimoine/managedunits/u-001/' },
+    { type: 'unit', id: 'u-001', label: 'A-001 - Studio A1', url: '/api/patrimoine/managedunits/u-001/' },
     { type: 'contact', id: 'c-st-1', label: 'Awounfouet Thomas', url: '/api/contacts/c-st-1/' },
   ],
 }

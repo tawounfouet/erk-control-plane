@@ -41,7 +41,7 @@ export function isApiError(err: unknown): err is ApiError {
 export function toApiError(err: unknown): ApiError {
   if (isApiError(err)) return err
   if (err instanceof TypeError && err.message === 'Failed to fetch') {
-    return new ApiError(0, 'Network error — check your connection')
+    return new ApiError(0, 'Network error - check your connection')
   }
   if (err instanceof Error) {
     return new ApiError(0, err.message)

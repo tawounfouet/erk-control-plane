@@ -61,7 +61,7 @@ export function EquipmentPage() {
       <PageHeader title="Stock atomique" description="Chaque ligne représente un équipement physique traçable, distinct du catalogue de modèles." />
       <div className="grid gap-4 lg:grid-cols-[1fr_auto]">
         <Card><CardContent className="flex flex-col gap-3 p-4 sm:flex-row"><Input aria-label="Rechercher dans le stock" placeholder="Référence, désignation, marque…" value={search} onChange={(event) => setSearch(event.target.value)} /><select aria-label="Filtrer par statut" className="h-10 rounded-lg border bg-background px-3 text-sm" value={status} onChange={(event) => setStatus(event.target.value)}><option value="">Tous les statuts</option><option value="IN_STOCK">En stock</option><option value="ASSIGNED">Affectés</option><option value="OUT_OF_INVENTORY">Sortis</option></select></CardContent></Card>
-        <Card><CardContent className="flex h-full items-center gap-3 p-4"><Boxes aria-hidden="true" className="text-primary" /><div><p className="text-2xl font-semibold tabular-nums">{equipments.data?.count ?? '—'}</p><p className="text-xs text-muted-foreground">unités physiques</p></div></CardContent></Card>
+        <Card><CardContent className="flex h-full items-center gap-3 p-4"><Boxes aria-hidden="true" className="text-primary" /><div><p className="text-2xl font-semibold tabular-nums">{equipments.data?.count ?? '-'}</p><p className="text-xs text-muted-foreground">unités physiques</p></div></CardContent></Card>
       </div>
 
       <details className="rounded-xl border bg-card p-5">

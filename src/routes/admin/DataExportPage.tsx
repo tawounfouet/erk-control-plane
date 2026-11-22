@@ -82,7 +82,7 @@ export function DataExportPage() {
                           <FileSpreadsheet className="h-4 w-4 inline" />
                         </a>
                       ) : (
-                        '—'
+                        '-'
                       )}
                     </td>
                   </tr>

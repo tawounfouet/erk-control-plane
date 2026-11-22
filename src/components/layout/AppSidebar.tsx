@@ -47,7 +47,7 @@ export function AppSidebar({ collapsed, mobileOpen, onCollapsedChange, onMobileC
         )}
       >
         <div className="flex h-[4.5rem] shrink-0 items-center border-b border-sidebar-border px-4">
-          <Link to="/" onClick={onMobileClose} className={cn('flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring', collapsed && 'lg:mx-auto')} aria-label="Eurekanet — accueil">
+          <Link to="/" onClick={onMobileClose} className={cn('flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring', collapsed && 'lg:mx-auto')} aria-label="Eurekanet - accueil">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground shadow-sm">
               <Building2 aria-hidden="true" className="h-5 w-5" />
             </span>

@@ -102,7 +102,7 @@ export function DashboardPage() {
                 <TrendingUp aria-hidden="true" className="h-4 w-4" />
                 Taux d'occupation
               </div>
-              {isLoading ? <Skeleton className="mt-3 h-10 w-24" /> : <p className="mt-2 text-4xl font-bold tabular-nums">{stats?.occupancy_rate ?? '—'}<span className="text-xl"> %</span></p>}
+              {isLoading ? <Skeleton className="mt-3 h-10 w-24" /> : <p className="mt-2 text-4xl font-bold tabular-nums">{stats?.occupancy_rate ?? '-'}<span className="text-xl"> %</span></p>}
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted" aria-hidden="true">
                 <div className="h-full rounded-full bg-primary transition-[width]" style={{ width: `${Math.min(stats?.occupancy_rate ?? 0, 100)}%` }} />
               </div>
@@ -119,11 +119,11 @@ export function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <Link to="/operations" className="flex items-center justify-between gap-3 rounded-xl border bg-background/70 p-3 transition-colors hover:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-              <span><strong className="block text-2xl tabular-nums">{stats?.maintenance_open ?? '—'}</strong><span className="text-xs text-muted-foreground">interventions ouvertes</span></span>
+              <span><strong className="block text-2xl tabular-nums">{stats?.maintenance_open ?? '-'}</strong><span className="text-xs text-muted-foreground">interventions ouvertes</span></span>
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Link>
             <Link to="/suggestions" className="flex items-center justify-between gap-3 rounded-xl border bg-background/70 p-3 transition-colors hover:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-              <span><strong className="block text-2xl tabular-nums">{stats?.unread_suggestions ?? '—'}</strong><span className="text-xs text-muted-foreground">suggestions non lues</span></span>
+              <span><strong className="block text-2xl tabular-nums">{stats?.unread_suggestions ?? '-'}</strong><span className="text-xs text-muted-foreground">suggestions non lues</span></span>
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Link>
           </CardContent>
@@ -133,10 +133,10 @@ export function DashboardPage() {
       <section aria-labelledby="key-metrics-heading" className="mt-6">
         <h2 id="key-metrics-heading" className="sr-only">Indicateurs clés</h2>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Logements" value={stats?.total_units?.toString() ?? '—'} detail="Ensemble du parc géré" icon={Building2} loading={isLoading} />
-          <StatCard label="Locataires actifs" value={stats?.active_tenants?.toString() ?? '—'} detail="Dossiers en cours" icon={Users} loading={isLoading} tone="success" />
-          <StatCard label="Maintenance ouverte" value={stats?.maintenance_open?.toString() ?? '—'} detail={`${stats?.maintenance_in_progress ?? '—'} intervention(s) en cours`} icon={Wrench} loading={isLoading} tone="warning" />
-          <StatCard label="Suggestions non lues" value={stats?.unread_suggestions?.toString() ?? '—'} detail="Messages à qualifier" icon={MessageSquare} loading={isLoading} />
+          <StatCard label="Logements" value={stats?.total_units?.toString() ?? '-'} detail="Ensemble du parc géré" icon={Building2} loading={isLoading} />
+          <StatCard label="Locataires actifs" value={stats?.active_tenants?.toString() ?? '-'} detail="Dossiers en cours" icon={Users} loading={isLoading} tone="success" />
+          <StatCard label="Maintenance ouverte" value={stats?.maintenance_open?.toString() ?? '-'} detail={`${stats?.maintenance_in_progress ?? '-'} intervention(s) en cours`} icon={Wrench} loading={isLoading} tone="warning" />
+          <StatCard label="Suggestions non lues" value={stats?.unread_suggestions?.toString() ?? '-'} detail="Messages à qualifier" icon={MessageSquare} loading={isLoading} />
         </div>
       </section>
 

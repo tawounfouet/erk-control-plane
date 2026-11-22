@@ -159,7 +159,7 @@ export function SuggestionsPage() {
                   <p className="truncate font-medium">{suggestion.titre}</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">
                     {CATEGORY_LABELS[suggestion.categorie] ?? suggestion.categorie}
-                    {suggestion.anonyme ? '' : ` — ${suggestion.author_display}`}
+                    {suggestion.anonyme ? '' : ` - ${suggestion.author_display}`}
                   </p>
                 </div>
                 <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[suggestion.status]}`}>

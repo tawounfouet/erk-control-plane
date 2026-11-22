@@ -52,7 +52,7 @@ async function enableMocks() {
     console.info('[MSW] Mock service worker started successfully')
   } catch (err) {
     console.error('[MSW] Failed to start mock service worker:', err)
-    console.info('[APP] Continuing without mocks — API calls may fail')
+    console.info('[APP] Continuing without mocks - API calls may fail')
   }
 }
 

@@ -6,8 +6,8 @@ export function SystemHealthPage() {
   const services = [
     { name: 'Base de données', status: 'healthy', icon: Database, latency: '12ms' },
     { name: 'Redis', status: 'healthy', icon: Server, latency: '4ms' },
-    { name: 'Celery', status: 'healthy', icon: Activity, latency: '—' },
-    { name: 'Stockage', status: 'healthy', icon: HardDrive, latency: '—' },
+    { name: 'Celery', status: 'healthy', icon: Activity, latency: '-' },
+    { name: 'Stockage', status: 'healthy', icon: HardDrive, latency: '-' },
   ]
 
   return (
